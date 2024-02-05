@@ -42,6 +42,9 @@ add_action('wp_before_admin_bar_render', 'athemeart_custom_logo_wp_dashboard');
 //Disable XML-RPC
 add_filter('xmlrpc_enabled', '__return_false');
 
+//If plugins not load
+define('WP_HTTP_BLOCK_EXTERNAL', false);
+
 //Hiding WordPress version:
 function wp_version_remove_version() {
 return '';
