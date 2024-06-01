@@ -13,7 +13,7 @@ style.css (required)
 single.php
 comments.php
 archive.php
-screenshot.png (image)
+screenshot.png (theme cover image)
 
 //Romove Adminbar
  add_filter('show_admin_bar', '__return_false'); 
