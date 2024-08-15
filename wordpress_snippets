@@ -40,8 +40,7 @@ echo '<div class="Preloader"><img src="'.$loader.'" alt="" style="height: 150px;
 <script>
 document.body.style.overflow = "hidden";
 document.addEventListener("DOMContentLoaded", () => setTimeout( function(){
-document.querySelector("div.Preloader").remove(); 
-
+document.querySelector("div.Preloader").remove(); 
 document.body.style.overflow = "visible"; } , '.$delay.' * 1000));
 </script>
 '; }}
