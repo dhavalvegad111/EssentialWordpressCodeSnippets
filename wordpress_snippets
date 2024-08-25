@@ -400,16 +400,24 @@ get_header();
 get_footer();
 ?>
 
-/* WP LoginPage Logo change */
+// Replace the WordPress login logo with your custom logo
+if( !function_exists( 'custom_login_logo' ) ){
+    function custom_login_logo() {
+        echo '<style>
+            h1 a { background-image: url("path/to/your/logo.png") !important; }
+        </style>';
+    }
+    add_action( 'login_head', 'custom_login_logo' );
+}
 
-// changes main login page url
+// Changes main login page url
 function wp_login_page_URL( $url ) {
 	$url = home_url('/');
 	return $url;
 }
 add_filter('login_headerurl', 'wp_login_page_URL');
 
-// replaces default WordPress logo
+// Replaces default WordPress logo
 function add_logo_Login_page() {
 	echo '<style>.login h1 a {
 	background-repeat: no-repeat;
@@ -423,8 +431,7 @@ function add_logo_Login_page() {
 
 add_action('login_head', 'add_logo_Login_page');
 
-
-//Paginate Your Site Without Plugins
+// Paginate Your Site Without Plugins
 global $wp_query;
 $total = $wp_query->max_num_pages;
 // only bother with the rest if we have more than 1 page!
@@ -444,7 +451,7 @@ if ( $total > 1 )  {
      ));
 }
 
-//Show Post Thumbnails in RSS Feed
+// Show Post Thumbnails in RSS Feed
 // Put post thumbnails into rss feed
 function wpfme_feed_post_thumbnail($content) {
 global $post;
