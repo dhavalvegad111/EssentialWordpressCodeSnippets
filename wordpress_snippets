@@ -54,6 +54,16 @@ if ( current_user_can( 'author' ) ) {
    return $show;
 });
 
+//To enable revisions for WooCommerce products
+add_filter( 'woocommerce_register_post_type_product', 'wpse_modify_product_post_type' );
+function wpse_modify_product_post_type( $args ) {
+     $args['supports'][] = 'revisions';
+     return $args;
+}
+
+//How to enable WordPress revisions
+define( 'WP_POST_REVISIONS', true );
+
 //Remove Adminbar
  add_filter('show_admin_bar', '__return_false'); 
 
