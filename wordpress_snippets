@@ -60,6 +60,15 @@ function smartwp_create_admin_user(){
 }
 add_action('init', 'smartwp_create_admin_user');
 
+// Block WP-Admin Area from Non-Administrators
+add_action( 'admin_init', function() {
+	if ( ! current_user_can( 'administrator' ) ) {
+       wp_redirect( home_url() );
+       exit;
+	}
+} );
+
+
 //Disable the WordPress Toolbar for Certain Users
 add_filter( 'show_admin_bar', function( $show ) {
 if ( current_user_can( 'author' ) ) {
@@ -67,6 +76,11 @@ if ( current_user_can( 'author' ) ) {
 }
    return $show;
 });
+
+// Disable Plugin & Theme Editor
+if ( ! defined( 'DISALLOW_FILE_EDIT' ) ) {
+	define( 'DISALLOW_FILE_EDIT', true );
+}
 
 //Enable Shortcodes in Text Widgets
 add_filter('widget_text', 'do_shortcode');
@@ -99,28 +113,34 @@ function change_excerpt_length( $length ) {
 }
 add_filter( 'excerpt_length', 'change_excerpt_length', 9999 );
 
-//Adds a custom logo to the top left of the WordPress admin
+// Adds a custom logo to the top left of the WordPress admin
 function athemeart_custom_logo_wp_dashboard() {
 echo "";
 }
 add_action('wp_before_admin_bar_render', 'athemeart_custom_logo_wp_dashboard');
 
-//Disable XML-RPC
+// Disable XML-RPC
 add_filter('xmlrpc_enabled', '__return_false');
 
-//If plugins not load
+// If plugins not load
 define('WP_HTTP_BLOCK_EXTERNAL', false);
 
-//Hiding WordPress version:
+// Limit the Number of Post Revisions
+add_filter( 'wp_revisions_to_keep', function( $limit ) {
+	// Limit to the last 20 revisions. Change 20 to whatever limit you want.
+	return 20;
+} );
+
+// Hiding WordPress version:
 function wp_version_remove_version() {
 return '';
 }
 add_filter('the_generator', 'wp_version_remove_version');
 
-//File Editing Disable
+// File Editing Disable
 define('DISALLOW_FILE_EDIT', true);
 
-//Require a Featured Post Image
+// Require a Featured Post Image
 add_action('save_post', 'wpds_check_thumbnail');
 add_action('admin_notices', 'wpds_thumbnail_error');
 function wpds_check_thumbnail($post_id) {
@@ -148,7 +168,7 @@ function wpds_thumbnail_error()
     }
 }
 
-//Add Custom Image Sizes
+// Add Custom Image Sizes
 if ( function_exists( 'add_image_size' ) ) {
     add_image_size( 'new-size', 300, 100, true ); //(cropped)
 }
@@ -161,7 +181,7 @@ function my_image_sizes($sizes) {
         return $newsizes;
 }
 
-//Sharpen Uploaded Images when Resized
+// Sharpen Uploaded Images when Resized
 function ajx_sharpen_resized_files( $resized_file ) {
     $image = wp_load_image( $resized_file );
     if ( !is_resource( $image ) )
@@ -192,7 +212,7 @@ function ajx_sharpen_resized_files( $resized_file ) {
 }   
 add_filter('image_make_intermediate_size', 'ajx_sharpen_resized_files',900);
 
-//Custom WordPress User Roles
+// Custom WordPress User Roles
 // To add the new role, using 'international' as the short name and
 // 'International Blogger' as the displayed name in the User list and edit page:
 /*
@@ -329,7 +349,6 @@ function post_type_name_init() {
     );
 
     register_post_type( 'projects', $args );
-
 }
 add_action( 'init', 'post_type_name_init' );
 
@@ -394,7 +413,6 @@ function wporg_register_taxonomy_course() {
 }
 add_action( 'init', 'wporg_register_taxonomy_course' );
 
-
 /* Register Custom Menu */
 function custom_menus() {
  register_nav_menus(
@@ -419,7 +437,6 @@ register_nav_menus(
 );
 }
 add_action('init','register_my_menus');
-.
 
 /* page.php */
 <?php
@@ -442,7 +459,7 @@ if( !function_exists( 'custom_login_logo' ) ){
     add_action( 'login_head', 'custom_login_logo' );
 }
 
-//Adds a custom logo to the top left of the WordPress admin
+// Adds a custom logo to the top left of the WordPress admin
 function smartwp_custom_logo_wp_dashboard() {
  echo "<style type='text/css'>
  #wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon:before {
@@ -465,6 +482,21 @@ function wp_login_page_URL( $url ) {
 }
 add_filter('login_headerurl', 'wp_login_page_URL');
 
+// WordPress Logo on Login Page
+add_filter( 'login_head', function () {
+	// Adjust the Width & Height accordingly.
+	$custom_logo = 'https://wpcode.com/wp-admin/images/wordpress-logo.svg';
+	$logo_width  = 84;
+	$logo_height = 84;
+
+	printf(
+		'<style>.login h1 a {background-image:url(%1$s) !important; margin:0 auto; width: %2$spx; height: %3$spx; background-size: 100%%;}</style>',
+		$custom_logo,
+		$logo_width,
+		$logo_height
+	);
+}, 990 );
+
 // Replaces default WordPress logo
 function add_logo_Login_page() {
 	echo '<style>.login h1 a {
@@ -478,6 +510,25 @@ function add_logo_Login_page() {
 }
 
 add_action('login_head', 'add_logo_Login_page');
+
+// Change “Howdy Admin” in Admin Bar
+function wpcode_snippet_replace_howdy( $wp_admin_bar ) {
+	// Edit to set what you want the admin bar to display intead of "Howdy,".
+	$new_howdy = 'Welcome,';
+	$my_account = $wp_admin_bar->get_node( 'my-account' );
+	if ( ! isset( $my_account->title ) ) {
+		return;
+	}
+	$wp_admin_bar->add_node(
+		array(
+			'id'    => 'my-account',
+			'title' => str_replace( 'Howdy,', $new_howdy, $my_account->title ),
+		)
+	);
+}
+
+add_filter( 'admin_bar_menu', 'wpcode_snippet_replace_howdy', 9999 );
+
 
 // Paginate Your Site Without Plugins
 global $wp_query;
