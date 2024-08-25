@@ -16,8 +16,8 @@ archive.php
 screenshot.png (theme cover image)
 
 // Preloader in WordPress
-add_action( 'init','Allprocoding_Preloader' );
-function Allprocoding_Preloader() { if(!is_admin() &&  $GLOBALS["pagenow"] !== "wp-login.php" ) { 
+add_action( 'init','WordPressPreloader' );
+function WordPressPreloader() { if(!is_admin() &&  $GLOBALS["pagenow"] !== "wp-login.php" ) { 
 $delay = 1;	//seconds
 $loader = 'http://allprocoding2.epizy.com/wp-content/uploads/2023/05/Blocks-1s-200px-1.svg';
 $overlayColor = '#ffffff';	
@@ -44,8 +44,7 @@ align-items: center;
 <script>
 document.body.style.overflow = "hidden";
 document.addEventListener("DOMContentLoaded", () => setTimeout( function(){
-document.querySelector("div.Preloader").remove(); 
-
+document.querySelector("div.Preloader").remove();
 document.body.style.overflow = "visible"; } , '.$delay.' * 1000));
 </script>
 '; }}
