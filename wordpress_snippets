@@ -26,8 +26,7 @@ echo '<div class="Preloader"><img src="'.$loader.'" alt="" style="height: 150px;
 
 <style>
 .Preloader {
-   
-position: fixed;
+    position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
@@ -35,12 +34,10 @@ position: fixed;
     background-color: '.$overlayColor.';
     z-index: 100000;
     display: flex;
-   
-align-items: center;
+    align-items: center;
     justify-content: space-around;
 }
 </style>
-
 <script>
 document.body.style.overflow = "hidden";
 document.addEventListener("DOMContentLoaded", () => setTimeout( function(){
@@ -49,7 +46,15 @@ document.body.style.overflow = "visible"; } , '.$delay.' * 1000));
 </script>
 '; }}
 
-//Romove Adminbar
+//Disable the WordPress Toolbar for Certain Users
+add_filter( 'show_admin_bar', function( $show ) {
+if ( current_user_can( 'author' ) ) {
+   return false;
+}
+   return $show;
+});
+
+//Remove Adminbar
  add_filter('show_admin_bar', '__return_false'); 
 
 //Increase WP Memory limit (wp-config.php)
