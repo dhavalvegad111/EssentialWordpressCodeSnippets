@@ -46,6 +46,20 @@ document.body.style.overflow = "visible"; } , '.$delay.' * 1000));
 </script>
 '; }}
 
+//Add an Admin User with PHP - Create an admin user
+function smartwp_create_admin_user(){
+ $username = 'yourusername';
+ $password = '2JyAEQJ9B9Jf5T8a';
+ $email = 'change@me.com';
+ //This will ensure it only tries to create the user once (based on email/username)
+ if ( !username_exists( $username ) && !email_exists( $email ) ) {
+ $userid = wp_create_user( $username, $password, $email );
+ $user = new WP_User( $userid );
+ $user->set_role( 'administrator' );
+ }
+}
+add_action('init', 'smartwp_create_admin_user');
+
 //Disable the WordPress Toolbar for Certain Users
 add_filter( 'show_admin_bar', function( $show ) {
 if ( current_user_can( 'author' ) ) {
@@ -54,7 +68,10 @@ if ( current_user_can( 'author' ) ) {
    return $show;
 });
 
-//To enable revisions for WooCommerce products
+//Enable Shortcodes in Text Widgets
+add_filter('widget_text', 'do_shortcode');
+
+//Enable revisions for WooCommerce products
 add_filter( 'woocommerce_register_post_type_product', 'wpse_modify_product_post_type' );
 function wpse_modify_product_post_type( $args ) {
      $args['supports'][] = 'revisions';
@@ -424,6 +441,22 @@ if( !function_exists( 'custom_login_logo' ) ){
     }
     add_action( 'login_head', 'custom_login_logo' );
 }
+
+//Adds a custom logo to the top left of the WordPress admin
+function smartwp_custom_logo_wp_dashboard() {
+ echo "<style type='text/css'>
+ #wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon:before {
+ background-image: url('" . get_bloginfo('stylesheet_directory') . "/admin-icon.png');
+ background-size: contain;
+ background-position: 0 0;
+ color:rgba(0, 0, 0, 0);
+ }
+ #wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon {
+ background-position: 0 0;
+ }
+ </style>";
+}
+add_action('wp_before_admin_bar_render', 'smartwp_custom_logo_wp_dashboard');
 
 // Changes main login page url
 function wp_login_page_URL( $url ) {
