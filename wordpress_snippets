@@ -15,16 +15,19 @@ comments.php
 archive.php
 screenshot.png (theme cover image)
 
-// Add Preloader in WordPress
+// Preloader in WordPress
 add_action( 'init','Allprocoding_Preloader' );
-function Allprocoding_Preloader() { if(!is_admin() &&  $GLOBALS["pagenow"] !== "wp-login.php" ) { $delay = 1;	//seconds
+function Allprocoding_Preloader() { if(!is_admin() &&  $GLOBALS["pagenow"] !== "wp-login.php" ) { 
+$delay = 1;	//seconds
 $loader = 'http://allprocoding2.epizy.com/wp-content/uploads/2023/05/Blocks-1s-200px-1.svg';
-$overlayColor = '#ffffff';	
+$overlayColor = '#ffffff';	
+
 echo '<div class="Preloader"><img src="'.$loader.'" alt="" style="height: 150px;"></div>
 
 <style>
 .Preloader {
-   position: fixed;
+   
+position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
@@ -32,7 +35,8 @@ echo '<div class="Preloader"><img src="'.$loader.'" alt="" style="height: 150px;
     background-color: '.$overlayColor.';
     z-index: 100000;
     display: flex;
-   align-items: center;
+   
+align-items: center;
     justify-content: space-around;
 }
 </style>
@@ -40,7 +44,8 @@ echo '<div class="Preloader"><img src="'.$loader.'" alt="" style="height: 150px;
 <script>
 document.body.style.overflow = "hidden";
 document.addEventListener("DOMContentLoaded", () => setTimeout( function(){
-document.querySelector("div.Preloader").remove(); 
+document.querySelector("div.Preloader").remove(); 
+
 document.body.style.overflow = "visible"; } , '.$delay.' * 1000));
 </script>
 '; }}
