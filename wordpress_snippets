@@ -1,4 +1,4 @@
-/* WP File Structure */
+// WP File Structure
 header.php
 footer.php
 index.php (required)
@@ -46,12 +46,12 @@ document.body.style.overflow = "visible"; } , '.$delay.' * 1000));
 </script>
 '; }}
 
-//Add an Admin User with PHP - Create an admin user
+// Add an Admin User with PHP - Create an admin user
 function smartwp_create_admin_user(){
  $username = 'yourusername';
  $password = '2JyAEQJ9B9Jf5T8a';
  $email = 'change@me.com';
- //This will ensure it only tries to create the user once (based on email/username)
+ // This will ensure it only tries to create the user once (based on email/username)
  if ( !username_exists( $username ) && !email_exists( $email ) ) {
  $userid = wp_create_user( $username, $password, $email );
  $user = new WP_User( $userid );
@@ -69,7 +69,7 @@ add_action( 'admin_init', function() {
 } );
 
 
-//Disable the WordPress Toolbar for Certain Users
+// Disable the WordPress Toolbar for Certain Users
 add_filter( 'show_admin_bar', function( $show ) {
 if ( current_user_can( 'author' ) ) {
    return false;
@@ -82,40 +82,40 @@ if ( ! defined( 'DISALLOW_FILE_EDIT' ) ) {
 	define( 'DISALLOW_FILE_EDIT', true );
 }
 
-//Enable Shortcodes in Text Widgets
+// Enable Shortcodes in Text Widgets
 add_filter('widget_text', 'do_shortcode');
 
-//Enable revisions for WooCommerce products
+// Enable revisions for WooCommerce products
 add_filter( 'woocommerce_register_post_type_product', 'wpse_modify_product_post_type' );
 function wpse_modify_product_post_type( $args ) {
      $args['supports'][] = 'revisions';
      return $args;
 }
 
-//How to enable WordPress revisions
+// How to enable WordPress revisions
 define( 'WP_POST_REVISIONS', true );
 
-//Remove Adminbar
+// Remove Adminbar
  add_filter('show_admin_bar', '__return_false'); 
 
-//Increase WP Memory limit (wp-config.php)
+// Increase WP Memory limit (wp-config.php)
 define('WP_MEMORY_LIMIT','256M');
 
-//Increase WP Larger Memory limit 
+// Increase WP Larger Memory limit 
 define( 'WP_MAX_MEMORY_LIMIT', '256M' )
 
-//Disable auto WP Updates
+// Disable auto WP Updates
 define('WP_AUTO_UPDATE_CORE', false);
 
 // Change the default excerpt length in WordPress (default is 55 words)
 function change_excerpt_length( $length ) {
- return 24;
+	return 24;
 }
 add_filter( 'excerpt_length', 'change_excerpt_length', 9999 );
 
 // Adds a custom logo to the top left of the WordPress admin
 function athemeart_custom_logo_wp_dashboard() {
-echo "";
+	echo "";
 }
 add_action('wp_before_admin_bar_render', 'athemeart_custom_logo_wp_dashboard');
 
@@ -365,7 +365,7 @@ function create_book_tax_function() {
 }
 add_action( 'init', 'create_book_tax_function' );
 
-/* Querying By Post Type */
+// Querying By Post Type
 <?php
     $args = array('post_type' => 'news', 'page_per_post' => 5, 'orderby' => 'title', 'order' => 'ASC');	
     $newsPost = new WP_Query($args); 
@@ -378,7 +378,7 @@ add_action( 'init', 'create_book_tax_function' );
     wp_reset_postdata(); 
 ?>
 
-/* Taxonomy */
+// Taxonomy
 /*
 * Plugin Name: Course Taxonomy
 * Description: A short example showing how to add a taxonomy called Course.
@@ -413,7 +413,7 @@ function wporg_register_taxonomy_course() {
 }
 add_action( 'init', 'wporg_register_taxonomy_course' );
 
-/* Register Custom Menu */
+// Register Custom Menu
 function custom_menus() {
  register_nav_menus(
   array(
@@ -438,7 +438,7 @@ register_nav_menus(
 }
 add_action('init','register_my_menus');
 
-/* page.php */
+// page.php
 <?php
 get_header();
  if (have_posts()): 
@@ -461,17 +461,17 @@ if( !function_exists( 'custom_login_logo' ) ){
 
 // Adds a custom logo to the top left of the WordPress admin
 function smartwp_custom_logo_wp_dashboard() {
- echo "<style type='text/css'>
- #wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon:before {
- background-image: url('" . get_bloginfo('stylesheet_directory') . "/admin-icon.png');
- background-size: contain;
- background-position: 0 0;
- color:rgba(0, 0, 0, 0);
- }
- #wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon {
- background-position: 0 0;
- }
- </style>";
+	 echo "<style type='text/css'>
+	 #wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon:before {
+	 background-image: url('" . get_bloginfo('stylesheet_directory') . "/admin-icon.png');
+	 background-size: contain;
+	 background-position: 0 0;
+	 color:rgba(0, 0, 0, 0);
+	 }
+	 #wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon {
+	 background-position: 0 0;
+	 }
+	 </style>";
 }
 add_action('wp_before_admin_bar_render', 'smartwp_custom_logo_wp_dashboard');
 
@@ -508,7 +508,6 @@ function add_logo_Login_page() {
 }
 </style>';
 }
-
 add_action('login_head', 'add_logo_Login_page');
 
 // Change “Howdy Admin” in Admin Bar
@@ -528,7 +527,6 @@ function wpcode_snippet_replace_howdy( $wp_admin_bar ) {
 }
 
 add_filter( 'admin_bar_menu', 'wpcode_snippet_replace_howdy', 9999 );
-
 
 // Paginate Your Site Without Plugins
 global $wp_query;
@@ -562,7 +560,7 @@ return $content;
 add_filter('the_excerpt_rss', 'wpfme_feed_post_thumbnail');
 add_filter('the_content_feed', 'wpfme_feed_post_thumbnail');
 
-//Change the Author Permalink Structure
+// Change the Author Permalink Structure
 add_action('init', 'cng_author_base');
 function cng_author_base() {
     global $wp_rewrite;
@@ -570,10 +568,10 @@ function cng_author_base() {
     $wp_rewrite->author_base = $author_slug;
 }
 
-//WP Snippets URLs
+// WP Snippets URLs
 https://managewp.com/blog/enhanced-performance-code-snippets
 
-//WooCommerce Snippets
+// WooCommerce Snippets
 https://medium.com/@skhans/50-woocommerce-snippets-you-need-as-a-wordpress-developer-9d2d08a18b9a
 https://www.wpthemedetector.com/useful-code-snippets-wordpress/
 
